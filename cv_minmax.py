@@ -10,14 +10,14 @@ results=np.zeros((len(num_data),5))
 x_test=1+0.5*np.random.rand(1000)
 x_test=np.sort(x_test)
 x_test=x_test.reshape(-1,1)
-y_test=np.exp(x_test)
+y_test=np.exp(x_test)*(1+0.1*np.sin(20*x_test))
 
 
 start=time()
 for i in range(len(num_data)):
     for j in range(len(sigma)):
         x=1+0.5*np.random.rand(num_data[i])
-        y=np.exp(x)+sigma[j]*np.random.randn(num_data[i])
+        y=np.exp(x)*(1+0.1*np.sin(20*x))+sigma[j]*np.random.randn(num_data[i])
         gp = GaussianProcessRegressor()
         mp=MapieRegressor(gp, method='minmax',cv=10)
         mp.fit(x.reshape(-1,1), y)
