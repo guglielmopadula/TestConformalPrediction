@@ -5,11 +5,18 @@ from mapie.subsample import Subsample
 
 from time import time
 np.random.seed(0)
-num_data=np.array((50,100,500,1000,5000))
+num_data=np.array((50
+                   ,100
+                   ,500
+                   ,1000,
+                   5000
+                   ))
 sigma=np.array([0,0.001,0.01,0.05,0.1])
-results=np.zeros((5,6))
+results=np.zeros((len(num_data),5))
 
-x_test=1+0.5*np.random.rand(1000).reshape(-1,1)
+x_test=1+0.5*np.random.rand(1000)
+x_test=np.sort(x_test)
+x_test=x_test.reshape(-1,1)
 y_test=np.exp(x_test)
 
 
@@ -30,10 +37,21 @@ print(np.mean(results))
 
 
 import matplotlib.pyplot as plt
-plt.plot(num_data,results[:,0],label='sigma=0')
-plt.plot(num_data,results[:,1],label='sigma=0.001')
-plt.plot(num_data,results[:,2],label='sigma=0.01')
-plt.plot(num_data,results[:,3],label='sigma=0.05')
-plt.plot(num_data,results[:,4],label='sigma=0.1')
-plt.legend()
-plt.savefig('jackknife_ab_minmax.png')
+fig,ax=plt.subplots()
+ax.plot(num_data,results[:,0],label='sigma=0')
+ax.plot(num_data,results[:,1],label='sigma=0.001')
+ax.plot(num_data,results[:,2],label='sigma=0.01')
+ax.plot(num_data,results[:,3],label='sigma=0.05')
+ax.plot(num_data,results[:,4],label='sigma=0.1')
+ax.legend()
+fig.savefig('jackknife_ab_minmax.png')
+
+x_test=x_test.reshape(-1)
+down=y_pis[:,0].reshape(-1)
+up=y_pis[:,1].reshape(-1)
+fig,ax=plt.subplots()
+ax.plot(x_test,y_pred,label="predicted")
+ax.fill_between(x_test, down, up, alpha=0.2)
+ax.plot(x_test,y_test,label="true")
+ax.legend()
+fig.savefig('jackknife_ab_minmax_prediction.png')
